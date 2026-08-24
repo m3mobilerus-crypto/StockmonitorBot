@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1c1f24">
+<meta name="robots" content="noindex">
+<title>Калькулятор крепежа</title>
+<style>
+  :root{
+    --bg:#1c1f24;
+    --panel:#262a31;
+    --line:#3a4049;
+    --ink:#e8eaed;
+    --dim:#8b929c;
+    --accent:#f5a623;
+    --ok:#5dd39e;
+    --mono:'SF Mono','Consolas','Menlo',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font:16px/1.45 system-ui,-apple-system,'Segoe UI',sans-serif;
+    padding:calc(14px + env(safe-area-inset-top)) 12px calc(150px + env(safe-area-inset-bottom));
+    max-width:480px;
+    margin:0 auto;
+  }
+  h1{
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .sub{color:var(--dim);font-size:13px;margin:2px 0 14px}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 14px 12px;
+    margin-bottom:12px;
+  }
+  .card h2{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+    color:var(--dim);
+    margin-bottom:10px;
+  }
+  .field{margin-bottom:10px}
+  .field:last-of-type{margin-bottom:0}
+  label{
+    display:block;
+    font-size:13px;
+    color:var(--dim);
+    margin-bottom:4px;
+  }
+  .inp{
+    display:flex;
+    align-items:center;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    min-height:50px;              /* удобная зона нажатия */
+  }
+  .inp:focus-within{border-color:var(--accent)}
+  input{
+    flex:1;
+    min-width:0;
+    width:100%;
+    background:transparent;
+    border:0;
+    outline:0;
+    color:var(--ink);
+    font:600 20px var(--mono);    /* >=16px — iOS не зумит при фокусе */
+    padding:12px 14px;
+  }
+  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
+  input[type=number]{-moz-appearance:textfield}
+  .unit{
+    color:var(--dim);
+    font-size:14px;
+    padding:0 14px 0 4px;
+    white-space:nowrap;
+  }
+  .mid{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--dim);
+    padding-top:8px;
+  }
+  .mid b{color:var(--ink);font-weight:600}
+
+  /* Результат — прибит к низу экрана, всегда виден при вводе */
+  .result{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    max-width:480px;
+    margin:0 auto;
+    background:var(--panel);
+    border-top:2px solid var(--accent);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    box-shadow:0 -6px 18px rgba(0,0,0,.45);
+  }
+  .res-line{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:3px 0;
+  }
+  .res-line .name{color:var(--dim);font-size:13px}
+  .res-line .val{font:600 16px var(--mono);color:var(--ink)}
+  .res-line.total{
+    border-top:1px dashed var(--line);
+    margin-top:4px;
+    padding-top:7px;
+  }
+  .res-line.total .name{color:var(--ink);font-weight:700;font-size:15px}
+  .res-line.total .val{color:var(--ok);font-size:26px}
+  .err{color:#e07a6a;font-size:13px;padding:6px 2px 0;min-height:1em}
+</style>
+</head>
+<body>
+  <h1>Крепёж: цена за штуку</h1>
+  <div class="sub">Закупка на вес → цена штуки и партии</div>
+
+  <div class="card">
+    <h2>Закупка</h2>
+    <div class="field">
+      <label>Цена закупки</label>
+      <div class="inp"><input id="buyPrice" type="text" inputmode="decimal" value="2700"><span class="unit">₽</span></div>
+    </div>
+    <div class="field">
+      <label>За вес</label>
+      <div class="inp"><input id="buyWeight" type="text" inputmode="decimal" value="2"><span class="unit">кг</span></div>
+    </div>
+    <div class="mid" id="perKg"></div>
+  </div>
+
+  <div class="card">
+    <h2>По ГОСТ / справочнику</h2>
+    <div class="field">
+      <label>Количество штук</label>
+      <div class="inp"><input id="gostQty" type="text" inputmode="numeric" value="1000"><span class="unit">шт</span></div>
+    </div>
+    <div class="field">
+      <label>Вес этого количества</label>
+      <div class="inp"><input id="gostWeight" type="text" inputmode="decimal" value="0.5"><span class="unit">кг</span></div>
+    </div>
+    <div class="mid" id="perPieceWeight"></div>
+  </div>
+
+  <div class="card">
+    <h2>Продажа</h2>
+    <div class="field">
+      <label>Продаём штук</label>
+      <div class="inp"><input id="sellQty" type="text" inputmode="numeric" value="5"><span class="unit">шт</span></div>
+    </div>
+    <div class="field">
+      <label>Наценка (0 = без)</label>
+      <div class="inp"><input id="markup" type="text" inputmode="decimal" value="0"><span class="unit">%</span></div>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+
+  <div class="result">
+    <div class="res-line">
+      <span class="name">Себестоимость 1 шт</span>
+      <span class="val" id="costOne">—</span>
+    </div>
+    <div class="res-line">
+      <span class="name">Цена 1 шт с наценкой</span>
+      <span class="val" id="sellOne">—</span>
+    </div>
+    <div class="res-line total">
+      <span class="name">Итого за партию</span>
+      <span class="val" id="sellBatch">—</span>
+    </div>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+const num = id => parseFloat(($(id).value || '').replace(',', '.').replace(/\s/g, ''));
+const inputs = ['buyPrice','buyWeight','gostQty','gostWeight','sellQty','markup'];
+
+function fmt(v){
+  if(!isFinite(v)) return '—';
+  const digits = v < 1 ? 4 : 2;
+  return v.toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:digits}) + ' ₽';
+}
+
+function calc(){
+  const bp = num('buyPrice');
+  const bw = num('buyWeight');
+  const gq = num('gostQty');
+  const gw = num('gostWeight');
+  const sq = num('sellQty');
+  const mk = num('markup') || 0;
+
+  $('err').textContent = '';
+
+  if([bp,bw,gq,gw,sq].some(v => !isFinite(v) || v <= 0)){
+    ['costOne','sellOne','sellBatch'].forEach(id => $(id).textContent = '—');
+    $('perKg').textContent = '';
+    $('perPieceWeight').textContent = '';
+    if([bp,bw,gq,gw,sq].some(v => isFinite(v) && v <= 0))
+      $('err').textContent = 'Все значения должны быть больше нуля';
+    return;
+  }
+
+  const priceKg = bp / bw;
+  const pieceKg = gw / gq;
+  const costOne = priceKg * pieceKg;
+  const sellOne = costOne * (1 + mk/100);
+  const sellBatch = sellOne * sq;
+
+  $('perKg').innerHTML = '→ <b>' + fmt(priceKg) + '</b> за кг';
+  $('perPieceWeight').innerHTML = '→ 1 шт весит <b>' +
+    (pieceKg*1000).toLocaleString('ru-RU',{maximumFractionDigits:3}) + ' г</b>';
+
+  $('costOne').textContent = fmt(costOne);
+  $('sellOne').textContent = fmt(sellOne);
+  $('sellBatch').textContent = fmt(sellBatch);
+}
+
+inputs.forEach(id => $(id).addEventListener('input', calc));
+calc();
+</script>
+</body>
+</html>
