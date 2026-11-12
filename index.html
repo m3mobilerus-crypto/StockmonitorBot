@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>M3 MOBILE / Builder</title> 
+  <link rel="icon" href="https://lh3.googleusercontent.com/d/1lvqDJjgdI3qHNk5CgsCUv00U2qY1RyEE">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell" id="appShell"><header>
+<div class="header-top">
+  <!-- Brand -->
+  <div class="header-brand">
+    <div class="brand-logo">M3 MOBILE <span>/ BUILDER</span></div>
+    <div class="header-title" data-i18n="configurator_subtitle">Конфигуратор подбора</div>
+  </div>
+
+  <!-- Nav links row -->
+  <nav class="header-nav">
+    <!-- Category dropdown -->
+    <div class="nav-dropdown" id="cat-dropdown">
+      <button class="nav-btn nav-btn--active" id="cat-dropdown-btn" onclick="toggleNavDropdown('cat-dropdown')">
+        <span id="cat-label" data-i18n="all_devices">Все модели</span>
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="cat-dropdown-menu">
+        <button class="nav-drop-item active" data-cat="all" onclick="selectCategory('all','Все модели',this)" data-i18n-val="all_devices">Все модели</button>
+        <button class="nav-drop-item" data-cat="ultra-rugged" onclick="selectCategory('ultra-rugged','Ultra Rugged',this)">Ultra Rugged</button>
+        <button class="nav-drop-item" data-cat="rugged" onclick="selectCategory('rugged','Rugged',this)">Rugged</button>
+        <button class="nav-drop-item" data-cat="light-mobile" onclick="selectCategory('light-mobile','Light Mobile',this)">Light Mobile</button>
+        <button class="nav-drop-item" data-cat="wearable" onclick="selectCategory('wearable','Wearable',this)">Wearable</button>
+        <button class="nav-drop-item" data-cat="kiosk" onclick="selectCategory('kiosk','Kiosk',this)">Kiosk</button>
+      </div>
+    </div>
+
+    <!-- Other nav buttons -->
+   <button class="nav-btn" data-i18n="btn_site" onclick="window.open('https://m3mobile.net','_blank')">
+      <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>Сайт
+    </button>
+    <button class="nav-btn" data-i18n="btn_service" onclick="showModal('service-centers-modal')">
+      <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>Сервис
+    </button>
+    <button class="nav-btn" data-i18n="btn_tech_docs" onclick="window.open('https://m3mobile.ru','_blank')">
+      <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tech Docs
+    </button>
+
+    <!-- Stock dropdown -->
+    <div class="nav-dropdown" id="stock-dropdown">
+      <button class="nav-btn" id="stock-dropdown-btn" onclick="toggleNavDropdown('stock-dropdown')">
+        <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        Сток
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="stock-dropdown-menu">
+        <button class="nav-drop-item" onclick="closeNavDropdowns();openOcsModal()">
+          <span class="stock-dot stock-dot--ocs"></span>OCS
+        </button>
+        <button class="nav-drop-item" onclick="closeNavDropdowns();openTreolanModal()">
+          <span class="stock-dot stock-dot--treolan"></span>Treolan
+        </button>
+        <button class="nav-drop-item" onclick="closeNavDropdowns();openM3StockModal()">
+          <span class="stock-dot stock-dot--m3"></span>M3 Stock
+        </button>
+        <div class="nav-drop-divider"></div>
+        <button class="nav-drop-item" onclick="closeNavDropdowns();openCombinedModal()">
+          <svg style="width:13px;height:13px;margin-right:6px;opacity:.7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Сводный
+        </button>
+      </div>
+    </div>
+
+  </nav>
+
+  <a href="https://m3solutionbuilder.tilda.ws/page88650666.html" target="_blank" class="nav-btn" style="text-decoration:none" data-i18n="btn_dont_know">Я не знаю, что выбрать</a>
+
+  <!-- Icon buttons: language + contacts -->
+  <div class="header-icon-btns">
+    <!-- Language picker dropdown -->
+    <div class="nav-dropdown" id="lang-dropdown">
+      <button class="icon-btn" id="lang-dropdown-btn" onclick="toggleNavDropdown('lang-dropdown')" title="Language">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        <span class="icon-btn-label" id="lang-current">RU</span>
+      </button>
+      <div class="nav-dropdown-menu nav-dropdown-menu--right" id="lang-dropdown-menu">
+        <button class="nav-drop-item lang-item active" onclick="selectLang('ru',this)">
+          <span class="lang-flag">🇷🇺</span> Русский <span class="lang-code">RU</span>
+        </button>
+        <button class="nav-drop-item lang-item" onclick="selectLang('en',this)">
+          <span class="lang-flag">🇬🇧</span> English <span class="lang-code">EN</span>
+        </button>
+        <button class="nav-drop-item lang-item" onclick="selectLang('ko',this)">
+          <span class="lang-flag">🇰🇷</span> 한국어 <span class="lang-code">KO</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contacts icon button -->
+    <button class="icon-btn" onclick="showModal('contacts-modal')" title="Контакты">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </button>
+  </div>
+</div>
+</header>
+<div class="search-bar"><div class="search-row"><input type="text" id="sku-search" placeholder="Поиск по SKU устройства или аксессуара…" data-i18n-placeholder="search_placeholder" autocomplete="off"><button data-i18n="btn_search" class="btn-search" onclick="searchBySKU()"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Найти</button>
+</div>
+<div class="search-status" id="search-status">Загрузка данных...</div>
+</div>
+<div class="main-layout"><aside class="filters-sidebar"><div class="sidebar-title" data-i18n="filters">Фильтры</div>
+<div class="cat-strip">
+  <button class="cat-pill active" data-cat="all" onclick="selectCatPill('all',this)">Все модели</button>
+  <button class="cat-pill" data-cat="ultra-rugged" onclick="selectCatPill('ultra-rugged',this)">Ultra Rugged</button>
+  <button class="cat-pill" data-cat="rugged" onclick="selectCatPill('rugged',this)">Rugged</button>
+  <button class="cat-pill" data-cat="light-mobile" onclick="selectCatPill('light-mobile',this)">Light Mobile</button>
+  <button class="cat-pill" data-cat="wearable" onclick="selectCatPill('wearable',this)">Wearable</button>
+  <button class="cat-pill" data-cat="kiosk" onclick="selectCatPill('kiosk',this)">Kiosk</button>
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_model">Модель</label>
+<select id="model-select" class="filter-select" onchange="updateAndroidOptions();filterSKU();"><option value="" data-i18n="all_models">Все модели</option>
+</select>
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_android">Android</label>
+<select id="android-select" class="filter-select" onchange="updateScannerOptions();filterSKU();"><option value="" data-i18n="all_android">Любая версия</option>
+</select>
+</div>
+<div class="filter-group" id="scanner-filter-group"><label class="filter-label" data-i18n="filter_scanner">Сканер</label>
+<div id="scanner-dropdown" class="custom-scanner-dropdown">
+  <div id="scanner-display" class="filter-select custom-scanner-trigger" onclick="toggleScannerDropdown()" style="cursor:pointer;user-select:none;display:flex;align-items:center;justify-content:space-between;padding-top:6px;padding-bottom:6px;padding-left:0;padding-right:22px;margin:0;border:none;border-bottom:1px solid rgba(255,255,255,.12);background:transparent;color:#fff;font-size:14px;font-weight:700;width:100%;box-sizing:border-box;border-radius:0">
+    <span id="scanner-display-text" data-i18n="all_scanners">Любой сканер</span>
+    <svg style="width:12px;height:12px;flex-shrink:0;opacity:.35" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div id="scanner-options" class="scanner-options-list" style="display:none"></div>
+</div>
+<input type="hidden" id="scanner-select" value="">
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_memory">Память</label>
+<select id="memory-select" class="filter-select" onchange="updateButtonsOptions();filterSKU();"><option value="" data-i18n="all_memory">Любая память</option>
+</select>
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_buttons">Кнопки</label>
+<select id="buttons-select" class="filter-select" onchange="updateHandleOptions();filterSKU();"><option value="" data-i18n="all_buttons">Любое кол-во</option>
+</select>
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_handle">Рукоятка</label>
+<select id="handle-select" class="filter-select" onchange="updateLteOptions();filterSKU();"><option value="" data-i18n="all_handle">Любой тип</option>
+</select>
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_lte">LTE</label>
+<select id="lte-select" class="filter-select" onchange="updateFrostOptions();filterSKU();"><option value="" data-i18n="lte_any">Не важно</option>
+<option value="YES" data-i18n="lte_yes">Есть LTE</option>
+<option value="NO" data-i18n="lte_no">Нет LTE</option>
+</select>
+</div>
+<div class="filter-group"><label class="filter-label" data-i18n="filter_frozen">Морозостойкость</label>
+<select id="frost-select" class="filter-select" onchange="filterSKU();"><option value="" data-i18n="lte_any">Не важно</option>
+<option value="YES" data-i18n="frozen_yes">Морозостойкий</option>
+<option value="NO" data-i18n="frozen_no">Не морозостойкий</option>
+</select>
+</div>
+<button data-i18n="btn_clear_filters" class="btn-reset" onclick="resetFilters()"><svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Сбросить фильтры</button>
+</aside>
+<div class="results-area"><div class="results-header"><div class="results-heading" data-i18n="results_heading">Результаты подбора</div>
+<div class="results-count" id="results-count">0 SKU</div>
+</div>
+<div id="results-container"><div class="no-results"><p>Загрузка данных…</p></div>
+</div>
+<div class="accessory-panel" id="accessorySelection"><div class="acc-header"><h3 data-i18n="acc_for_sku">Аксессуары для SKU:</h3><span id="selectedSKUCode"></span></div>
+<div class="acc-warning" data-i18n="acc_price_approx">Ориентировочная цена</div>
+<div class="acc-body"><div id="currentSKUDetails" class="acc-sku-info"></div>
+<div id="accWizard"></div>
+<button type="button" class="accw-list-toggle" id="accListToggle" onclick="toggleAccList()" style="display:none">
+  <span id="accListToggleLabel">Весь список аксессуаров</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+<div id="accessoriesList"></div>
+<div class="acc-total"><span data-i18n="spec_total">Итоговая стоимость:</span><strong id="finalConfigurationPrice">0 $</strong></div>
+<button class="btn-add-spec" data-i18n="btn_add_to_spec" onclick="addSKUToSpecification()"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Добавить в спецификацию</button>
+</div>
+</div>
+</div>
+</div>
+<div class="spec-table-section" id="finalConfiguration"><div class="spec-table-header"><h3 data-i18n="spec_final">Финальная спецификация</h3><div class="spec-actions"><button data-i18n="btn_add_manual_short" class="btn-sm" onclick="openAddManualSKUModal()"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Добавить вручную</button>
+<button class="btn-sm btn-excel-img" onclick="exportToExcelWithImages()" title="Скачать Excel с картинками устройств"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Excel 📷</button>
+<button data-i18n="btn_print" class="btn-sm" onclick="printSpec()"><svg class="ico" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Печать</button>
+<button class="btn-sm danger" onclick="clearSpecification()"><svg class="ico" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>Очистить</button>
+</div>
+</div>
+<table id="finalConfigTable"><thead><tr><th>Тип</th>
+<th>SKU</th>
+<th data-i18n="spec_name">Наименование</th>
+<th data-i18n="spec_qty">Кол-во</th>
+<th>Цена, $</th>
+<th data-i18n="spec_total_col">Итого, $</th>
+<th></th>
+</tr>
+</thead><tbody id="specTableBody"></tbody></table>
+</div>
+<div class="app-footer">by Vladimir Mitrofanov &nbsp;|&nbsp; +7 917 518 6388 &nbsp;|&nbsp;mitrofanovv@gmail.com</div>
+</div>
+<div class="floating-group"><button class="btn-float btn-float-addspec" id="btn-float-addspec" onclick="addSKUToSpecification()"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Добавить в спецификацию</button>
+<button class="btn-float btn-float-compare" id="btn-float-compare" onclick="showComparison()"><svg class="ico" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span data-i18n="btn_compare_short">Сравнить</span><span class="float-badge" id="comparison-count">0</span></button>
+<button class="btn-float-clear-compare" id="btn-float-clear-compare" onclick="clearComparison()" title="Очистить сравнение">✕</button>
+<button class="btn-float btn-float-spec" id="btn-float-spec" onclick="scrollToSpec()"><svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span data-i18n="spec_title">Спецификация</span><span class="float-badge" id="spec-count">0</span></button>
+</div>
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg style="width:22px;height:22px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+  <span style="font-size:14px;font-weight:900;color:#fff;line-height:1;letter-spacing:1px">UP</span>
+</button>
+<div class="modal-backdrop" id="service-centers-modal" onclick="closeModalOnBackdrop(event,this)"><div class="modal-box"><div class="modal-head"><h2 data-i18n="service_centers">Наши сервисные центры</h2><button class="modal-close" onclick="closeModal('service-centers-modal')">×</button>
+</div>
+<div class="modal-body"><div class="sc-grid"><div class="sc-item"><a href="https://www.rss.ru/" target="_blank"><img src="https://lh3.googleusercontent.com/d/1oXAGYzJb9raq7cM-i5xsk51-2vPB0jR6" alt="RSS"></a></div>
+<div class="sc-item"><a href="https://wetm.ru/servisniy-tsentr/" target="_blank"><img src="https://lh3.googleusercontent.com/d/1fqjIYfiHDvBcsADEqSzS_vC-bCED3GI7" alt="WETM"></a></div>
+</div>
+</div>
+</div>
+</div>
+<div class="modal-backdrop" id="sku-guide-modal" onclick="closeModalOnBackdrop(event,this)"><div class="modal-box"><div class="modal-head"><h2>Как читать SKU</h2><button class="modal-close" onclick="closeModal('sku-guide-modal')">×</button>
+</div>
+<div class="modal-body"><div class="sku-guide-content"><p data-i18n="sku_guide_desc">Руководство по чтению SKU поможет вам понять структуру артикулов продукции M3 MOBILE.</p><p data-i18n="btn_download_hint">Нажмите кнопку ниже, чтобы скачать файл:</p><a href="https://docs.google.com/spreadsheets/d/1IPSD12w8M4azk_ICRiBglxboGIjoe0Hh/export?format=xlsx" class="btn-download" download="M3_MOBILE_SKU_Guide.xlsx"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span data-i18n="btn_download_sku">Скачать руководство по SKU</span></a></div>
+</div>
+</div>
+</div>
+<div class="modal-backdrop" id="comparison-modal" onclick="closeModalOnBackdrop(event,this)"><div class="modal-box wide"><div class="modal-head"><h2 data-i18n="comparison_title_modal">Сравнение SKU</h2><button class="modal-close" onclick="closeModal('comparison-modal')">×</button>
+</div>
+<div class="modal-body" id="comparison-body"></div>
+</div>
+</div>
+<div class="modal-backdrop" id="manual-sku-modal" onclick="closeModalOnBackdrop(event,this)"><div class="modal-box"><div class="modal-head"><h2 data-i18n="btn_add_manual">Добавить артикул вручную</h2><button class="modal-close" onclick="closeModal('manual-sku-modal')">×</button>
+</div>
+<div class="modal-body"><div class="form-group"><label class="form-label" data-i18n="spec_sku">Артикул (SKU)</label>
+<input type="text" id="manual-sku" class="form-input" placeholder="Введите артикул"></div>
+<div class="form-group"><label class="form-label">Наименование</label>
+<textarea id="manual-name" class="form-textarea" placeholder="Введите наименование"></textarea></div>
+<div class="form-group"><label class="form-label" data-i18n="spec_price">Цена ($)</label>
+<input type="number" id="manual-price" class="form-input" placeholder="0.00" min="0" step="0.01"></div>
+<div class="form-actions"><button class="btn-cancel" onclick="closeModal('manual-sku-modal')" data-i18n="btn_cancel">Отмена</button>
+<button class="btn-submit" onclick="addManualSKU()" data-i18n="btn_add_short">Добавить</button>
+</div>
+</div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()"><button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+<img id="lightbox-img" src="" alt=""></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TREOLAN STOCK MODAL — вставить перед 
+<div id="treolan-modal" class="treolan-modal-backdrop" >
+  <div class="treolan-modal">
+    <div class="treolan-modal-head">
+      <span class="treolan-modal-title">🔵 Сток Treolan</span>
+      <button class="treolan-modal-close" onclick="closeTreolanModal()">✕</button>
+    </div>
+    <div class="treolan-toolbar">
+      <div class="search-clear-wrap"><input type="text" id="treolan-search" class="treolan-search" placeholder="Поиск по артикулу или названию..." oninput="filterTreolanTable();_updateClear(this)"><button class="search-clear-btn" onclick="_clearSearch('treolan-search',filterTreolanTable)" style="display:none">✕</button></div>
+      <select id="treolan-avail-filter" class="treolan-filter" onchange="filterTreolanTable()">
+        <option value="">Все позиции</option>
+        <option value="avail">В наличии</option>
+        <option value="transit">Есть транзит</option>
+        <option value="none">Нет в наличии</option>
+      </select>
+    </div>
+    <div id="treolan-stats" style="padding:4px 16px;font-size:12px;opacity:.6"></div>
+    <div id="treolan-body" style="overflow-y:auto;flex:1;padding:0 8px 8px"></div>
+    <div class="treolan-footer">
+      <span style="margin-right:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="treolan-freshness" style="font-size:11px;opacity:.5"></span><span id="treolan-updated" style="font-size:12px;opacity:.6"></span><span id="treolan-footer-info" style="font-size:12px;opacity:.6"></span></span>
+      <button class="t-refresh-btn" onclick="exportTreolan()">📥 Excel</button>
+      <button class="t-refresh-btn" onclick="loadTreolanData()">Обновить</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMBINED STOCK MODAL -->
+<div id="combined-modal" class="treolan-modal-backdrop"  style="display:none">
+  <div class="treolan-modal" style="max-width:960px">
+    <div class="treolan-modal-head">
+      <span class="treolan-modal-title">🔀 Сводный сток — все дистрибьюторы</span>
+      <button class="treolan-modal-close" onclick="closeCombinedModal()">✕</button>
+    </div>
+    <div class="treolan-toolbar">
+      <div class="search-clear-wrap"><input type="text" id="combined-search" class="treolan-search" placeholder="Поиск по артикулу или названию..." oninput="filterCombinedTable();_updateClear(this)"><button class="search-clear-btn" onclick="_clearSearch('combined-search',filterCombinedTable)" style="display:none">✕</button></div>
+      <select id="combined-avail-filter" class="treolan-filter" onchange="filterCombinedTable()">
+        <option value="">Все позиции</option>
+        <option value="avail" selected>Есть хоть у одного</option>
+        <option value="all3">Есть у всех трёх</option>
+      </select>
+      <button class="t-refresh-btn" onclick="loadCombinedData()">Обновить всё</button>
+    </div>
+    <div id="combined-stats" style="padding:6px 16px;font-size:12px;opacity:.6"></div>
+    <div id="combined-body" style="overflow-y:auto;flex:1;padding:0 8px 8px"></div>
+    <div class="treolan-footer" style="display:flex;align-items:center;gap:10px">
+      <span id="combined-freshness" style="font-size:11px;opacity:.5;margin-right:auto"></span>
+      <span id="combined-footer-info" style="font-size:12px;opacity:.6"></span>
+      <button class="t-refresh-btn" onclick="exportCombined()">📥 Excel</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- OCS STOCK MODAL -->
+<div class="treolan-modal-backdrop" id="ocs-modal" >
+  <div class="treolan-modal">
+    <div class="treolan-modal-head">
+      <div>
+        <h2>Склад OCS — M3 Mobile</h2>
+        <div class="t-meta" id="ocs-updated">Загрузка...</div>
+      </div>
+      <button class="treolan-close" onclick="closeOcsModal()">✕</button>
+    </div>
+    <div class="treolan-toolbar">
+      <div class="search-clear-wrap"><input type="text" class="treolan-search" id="ocs-search" placeholder="Поиск по артикулу или названию..." oninput="filterOcsTable();_updateClear(this)"><button class="search-clear-btn" onclick="_clearSearch('ocs-search',filterOcsTable)" style="display:none">✕</button></div>
+      <select class="treolan-filter" id="ocs-avail-filter" onchange="filterOcsTable()">
+        <option value="all">Все позиции</option>
+        <option value="avail">Только в наличии</option>
+        <option value="transit">Только транзит</option>
+        <option value="none">Нет в наличии</option>
+      </select>
+      <span class="treolan-stats" id="ocs-stats"></span>
+    </div>
+    <div class="treolan-body" id="ocs-body">
+      <div class="treolan-loading">⏳ Загружаем данные...</div>
+    </div>
+    <div class="treolan-footer">
+      <span id="ocs-footer-info" style="font-size:12px;opacity:.6"></span>
+      <span style="margin-right:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="ocs-freshness" style="font-size:11px;opacity:.5"></span><button class="t-refresh-btn" onclick="exportOcs()">📥 Excel</button><button class="t-refresh-btn" onclick="loadOcsData()">Обновить</button>
+    </div>
+  </div>
+</div>
+
+<!-- M3 STOCK MODAL -->
+<div class="treolan-modal-backdrop" id="m3stock-modal" >
+  <div class="treolan-modal">
+    <div class="treolan-modal-head">
+      <div>
+        <h2>Сток M3 Mobile</h2>
+        <div class="t-meta" id="m3stock-updated">Загрузка...</div>
+      </div>
+      <button class="treolan-close" onclick="closeM3StockModal()">✕</button>
+    </div>
+    <div class="treolan-toolbar">
+      <div class="search-clear-wrap"><input type="text" class="treolan-search" id="m3stock-search" placeholder="Поиск по артикулу или названию..." oninput="filterM3StockTable();_updateClear(this)"><button class="search-clear-btn" onclick="_clearSearch('m3stock-search',filterM3StockTable)" style="display:none">✕</button></div>
+      <select class="treolan-filter" id="m3stock-avail-filter" onchange="filterM3StockTable()">
+        <option value="all">Все позиции</option>
+        <option value="avail">Только в наличии</option>
+        <option value="none">Нет в наличии</option>
+      </select>
+      <span class="treolan-stats" id="m3stock-stats"></span>
+    </div>
+    <div class="treolan-body" id="m3stock-body">
+      <div class="treolan-loading">⏳ Загружаем данные...</div>
+    </div>
+    <div class="treolan-footer">
+      <span id="m3stock-footer-info">Данные обновляются в реальном времени</span>
+      <span style="margin-right:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="m3-freshness" style="font-size:11px;opacity:.5"></span><button class="t-refresh-btn" onclick="exportM3Stock()">📥 Excel</button><button class="t-refresh-btn" onclick="m3StockLoaded=false;loadM3StockData()">Обновить</button>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+
+<div id="treolan-modal" class="treolan-modal-backdrop" >
+  <div class="treolan-modal">
+    <div class="treolan-modal-head">
+      <span class="treolan-modal-title">🔵 Сток Treolan</span>
+      <button class="treolan-modal-close" onclick="closeTreolanModal()">✕</button>
+    </div>
+    <div class="treolan-toolbar">
+      <div class="search-clear-wrap"><input type="text" id="treolan-search" class="treolan-search" placeholder="Поиск по артикулу или названию..." oninput="filterTreolanTable();_updateClear(this)"><button class="search-clear-btn" onclick="_clearSearch('treolan-search',filterTreolanTable)" style="display:none">✕</button></div>
+      <select id="treolan-avail-filter" class="treolan-filter" onchange="filterTreolanTable()">
+        <option value="">Все позиции</option>
+        <option value="avail">В наличии</option>
+        <option value="transit">Есть транзит</option>
+        <option value="none">Нет в наличии</option>
+      </select>
+    </div>
+    <div id="treolan-stats" style="padding:4px 16px;font-size:12px;opacity:.6"></div>
+    <div id="treolan-body" style="overflow-y:auto;flex:1;padding:0 8px 8px"></div>
+    <div class="treolan-footer">
+      <span style="margin-right:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span id="treolan-freshness" style="font-size:11px;opacity:.5"></span><span id="treolan-updated" style="font-size:12px;opacity:.6"></span><span id="treolan-footer-info" style="font-size:12px;opacity:.6"></span></span>
+      <button class="t-refresh-btn" onclick="exportTreolan()">📥 Excel</button>
+      <button class="t-refresh-btn" onclick="loadTreolanData()">Обновить</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMBINED STOCK MODAL -->
+<div id="combined-modal" class="treolan-modal-backdrop"  style="display:none">
+  <div class="treolan-modal" style="max-width:960px">
+    <div class="treolan-modal-head">
+      <span class="treolan-modal-title">🔀 Сводный сток — все дистрибьюторы</span>
+      <button class="treolan-modal-close" onclick="closeCombinedModal()">✕</button>
+    </div>
+    <div class="treolan-toolbar">
+      <div class="search-clear-wrap"><input type="text" id="combined-search" class="treolan-search" placeholder="Поиск по артикулу или названию..." oninput="filterCombinedTable();_updateClear(this)"><button class="search-clear-btn" onclick="_clearSearch('combined-search',filterCombinedTable)" style="display:none">✕</button></div>
+      <select id="combined-avail-filter" class="treolan-filter" onchange="filterCombinedTable()">
+        <option value="">Все позиции</option>
+        <option value="avail" selected>Есть хоть у одного</option>
+        <option value="all3">Есть у всех трёх</option>
+      </select>
+      <button class="t-refresh-btn" onclick="loadCombinedData()">Обновить всё</button>
+    </div>
+    <div id="combined-stats" style="padding:6px 16px;font-size:12px;opacity:.6"></div>
+    <div id="combined-body" style="overflow-y:auto;flex:1;padding:0 8px 8px"></div>
+    <div class="treolan-footer" style="display:flex;align-items:center;gap:10px">
+      <span id="combined-freshness" style="font-size:11px;opacity:.5;margin-right:auto"></span>
+      <span id="combined-footer-info" style="font-size:12px;opacity:.6"></span>
+      <button class="t-refresh-btn" onclick="exportCombined()">📥 Excel</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- CONTACTS MODAL -->
+<div id="contacts-modal" class="treolan-modal-backdrop" onclick="if(event.target===this)closeModal('contacts-modal')">
+  <div style="background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(13,14,26,.25);width:100%;max-width:520px;margin:20px;overflow:hidden;animation:modalIn .2s ease">
+    <div style="background:linear-gradient(135deg,#151960,#2764E2);color:#fff;padding:20px 24px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:17px;font-weight:700">Контакты M3 Mobile Russia</span>
+      <button onclick="closeModal('contacts-modal')" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div style="padding:24px;display:flex;gap:24px">
+      <div style="flex:1">
+        <!-- Contact 1 -->
+        <div style="margin-bottom:20px">
+          <div style="font-weight:700;color:#1E2171;font-size:14px">Владимир Митрофанов</div>
+          <div style="font-size:12px;color:#888;margin-bottom:6px">Channel/Disti Manager</div>
+          <a href="tel:+79175186388" style="display:flex;align-items:center;gap:6px;color:#2764E2;text-decoration:none;font-size:13px;margin-bottom:4px">📞 +7 917 518 6388</a>
+          <span style="color:#2764E2;font-size:13px">vmitrofanov@m3mobile.co.kr</span>
+        </div>
+        <!-- Contact 2 -->
+        <div style="margin-bottom:20px">
+          <div style="font-weight:700;color:#1E2171;font-size:14px">Евгения Суровикина</div>
+          <div style="font-size:12px;color:#888;margin-bottom:6px">Key Account Manager</div>
+          <a href="tel:+79264592229" style="display:flex;align-items:center;gap:6px;color:#2764E2;text-decoration:none;font-size:13px;margin-bottom:4px">📞 +7 926 459 2229</a>
+          <span style="color:#2764E2;font-size:13px">E.Surovikina@m3mobile.net</span>
+        </div>
+        <!-- Contact 3 -->
+        <div style="margin-bottom:20px">
+          <div style="font-weight:700;color:#1E2171;font-size:14px">Вадим Фидорин</div>
+          <div style="font-size:12px;color:#888;margin-bottom:6px">Tech. Support</div>
+          <a href="tel:+79269369202" style="display:flex;align-items:center;gap:6px;color:#2764E2;text-decoration:none;font-size:13px;margin-bottom:4px">📞 +7 926 936 9202</a>
+          <span style="color:#2764E2;font-size:13px">V.Fidorin@m3mobile.net</span>
+        </div>
+      </div>
+      <!-- QR Code -->
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:140px">
+        <a href="https://t.me/M3Mobile_Russia" target="_blank" style="display:block;text-decoration:none">
+          <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjUiIGhlaWdodD0iMTY1IiB2aWV3Qm94PSIwIDAgMTY1IDE2NSI+CjxyZWN0IHdpZHRoPSIxNjUiIGhlaWdodD0iMTY1IiBmaWxsPSJ3aGl0ZSIvPgo8cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjI1IiB5PSIyMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzNSIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQwIiB5PSIyMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDUiIHk9IjIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjYwIiB5PSIyMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNjUiIHk9IjIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSIyMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODUiIHk9IjIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExNSIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyMCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyNSIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzNSIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjIwIiB5PSIyNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTAiIHk9IjI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iMjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjgwIiB5PSIyNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDAiIHk9IjI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxNDAiIHk9IjI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iMzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjMwIiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzUiIHk9IjMwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0MCIgeT0iMzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNjUiIHk9IjMwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iMzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijg1IiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTI1IiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTMwIiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTQwIiB5PSIzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjM1IiB5PSIzNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIzNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzUiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4MCIgeT0iMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijg1IiB5PSIzNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTUiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjUiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxNDAiIHk9IjM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjMwIiB5PSI0MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzUiIHk9IjQwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0MCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSI0MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjQwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjgwIiB5PSI0MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODUiIHk9IjQwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwMCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyMCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyNSIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjIwIiB5PSI0NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTAiIHk9IjQ1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2NSIgeT0iNDUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSI0NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSI0NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTQwIiB5PSI0NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjAiIHk9IjUwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyNSIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjMwIiB5PSI1MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzUiIHk9IjUwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0MCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQ1IiB5PSI1MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTAiIHk9IjUwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2MCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSI1MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODAiIHk9IjUwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwMCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExNSIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyMCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyNSIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzNSIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iNTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjYwIiB5PSI1NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNjUiIHk9IjU1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4MCIgeT0iNTUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijg1IiB5PSI1NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAwIiB5PSI1NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjAiIHk9IjYwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyNSIgeT0iNjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjM1IiB5PSI2MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDAiIHk9IjYwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iNjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjY1IiB5PSI2MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODAiIHk9IjYwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwMCIgeT0iNjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iNjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iNjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQwIiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTUiIHk9IjY1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2MCIgeT0iNjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzUiIHk9IjY1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4NSIgeT0iNjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTI1IiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTMwIiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTM1IiB5PSI2NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjUiIHk9IjcwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQwIiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDUiIHk9IjcwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iNzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjU1IiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNjUiIHk9IjcwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iNzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijk1IiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAwIiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTI1IiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTQwIiB5PSI3MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjAiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjU1IiB5PSI3NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNjAiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iNzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjgwIiB5PSI3NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTUiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDAiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDUiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTUiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjUiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzUiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxNDAiIHk9Ijc1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iODAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjM1IiB5PSI4MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTAiIHk9IjgwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2NSIgeT0iODAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSI4MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODAiIHk9IjgwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5NSIgeT0iODAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iODAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iODAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjIwIiB5PSI4NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjUiIHk9Ijg1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iODUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQwIiB5PSI4NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDUiIHk9Ijg1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iODUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSI4NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODUiIHk9Ijg1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iODUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijk1IiB5PSI4NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSI4NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTM1IiB5PSI4NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjAiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyNSIgeT0iOTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjMwIiB5PSI5MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzUiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0MCIgeT0iOTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQ1IiB5PSI5MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTAiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2MCIgeT0iOTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjY1IiB5PSI5MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4NSIgeT0iOTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI5MCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTUiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDUiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjAiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjUiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzUiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxNDAiIHk9IjkwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iOTUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjM1IiB5PSI5NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDAiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2NSIgeT0iOTUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSI5NSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODAiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDUiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTUiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjUiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxNDAiIHk9Ijk1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0NSIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1NSIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2NSIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDAiIHk9IjEwMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTA1IiB5PSIxMDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTUiIHk9IjEwMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSIxMDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iMTAwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzUiIHk9IjEwMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNjAiIHk9IjEwNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODUiIHk9IjEwNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjEwNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAwIiB5PSIxMDUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEyMCIgeT0iMTA1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjEwNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTM1IiB5PSIxMDUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjIwIiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjI1IiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjMwIiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjM1IiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQwIiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQ1IiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijk1IiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwMCIgeT0iMTEwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjExMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSIxMTAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iMTEwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4MCIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4NSIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5NSIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDAiIHk9IjExNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSIxMTUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjE0MCIgeT0iMTE1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzNSIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0MCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2MCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI4NSIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5NSIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDAiIHk9IjEyMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTA1IiB5PSIxMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTUiIHk9IjEyMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSIxMjAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzNSIgeT0iMTIwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIyMCIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzNSIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI0MCIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2MCIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI2NSIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3NSIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5NSIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMDUiIHk9IjEyNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIxMjUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzNSIgeT0iMTI1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxNDAiIHk9IjEyNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMjAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzUiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNDAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNTAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzUiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iODUiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAwIiB5PSIxMzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwNSIgeT0iMTMwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMjAiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTI1IiB5PSIxMzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iMTMwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzUiIHk9IjEzMCIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTQwIiB5PSIxMzAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjIwIiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjYwIiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjY1IiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjExMCIgeT0iMTM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTUiIHk9IjEzNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTIwIiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iMTM1IiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzUiIHk9IjEzNSIgd2lkdGg9IjUiIGhlaWdodD0iNSIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTQwIiB5PSIxMzUiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjIwIiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjI1IiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjMwIiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjM1IiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQwIiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjQ1IiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjYwIiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijc1IiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9Ijk1IiB5PSIxNDAiIHdpZHRoPSI1IiBoZWlnaHQ9IjUiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwMCIgeT0iMTQwIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxM
